@@ -54,7 +54,7 @@
           <label for="address">Address </label> 
         </div>
         <div class="col-75">
-          <input type="text" v-model="form.address" size="50">
+          <input type="text" v-model="form.address" placeholder="Fill with address customer">
         </div>
       </div>
       <div class="row ">
@@ -77,7 +77,8 @@
         <tr v-for="customer in customers" :key="customer.id">
           <td>{{customer.name}}</td>
           <td>{{customer.email}}</td>
-          <td>{{customer.gender}}</td>
+          <td v-if="customer.gender==='M'">Male</td>
+          <td v-if="customer.gender==='F'">Female</td>
           <td>{{customer.is_married}}</td>
           <td>{{customer.address}}</td>
           <td><button @click="edit(customer)">Edit</button> ||  <button @click="del(customer)" >Delete</button></td>
