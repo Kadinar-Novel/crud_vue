@@ -81,7 +81,7 @@
           <td v-if="customer.gender==='F'">Female</td>
           <td>{{customer.is_married}}</td>
           <td>{{customer.address}}</td>
-          <td><button @click="edit(customer)">Edit</button> ||  <button @click="del(customer)" >Delete</button></td>
+          <td><button @click="edit(customer)" class="button-table">Edit</button> ||  <button @click="del(customer)" class="button-table">Delete</button></td>
         </tr>
       </table>
     </div>
@@ -113,14 +113,14 @@ export default {
   },
   methods: {
     load(){
-        axios.get('http://localhost:4000/show_all_customer').then(res => {
+        axios.get('http://localhost:8000/show_all_customer').then(res => {
         this.customers = res.data.result
       }).catch ((err) => {
         console.log(err);        
       })
     },
       add(){
-      axios.post('http://localhost:4000/create_customer', this.form).then(res => {
+      axios.post('http://localhost:8000/create_customer', this.form).then(res => {
           alert(res.data.status.message)
           this.load()
           this.form.name = ''
@@ -146,7 +146,7 @@ export default {
         this.form.address = customer.address 
     },
     update(form){ 
-       return axios.put('http://localhost:4000/update_customer/' + form.id , {
+       return axios.put('http://localhost:8000/update_customer/' + form.id , {
           name: this.form.name,
           email: this.form.email,
           password: this.form.password,
@@ -172,7 +172,7 @@ export default {
     },
     del(customer){
       if(confirm('Are you sure?'))
-      axios.delete('http://localhost:4000/delete_customer/' + customer.id).then(res =>{
+      axios.delete('http://localhost:8000/delete_customer/' + customer.id).then(res =>{
           alert(res.data.status.message)
           this.load()
           let index = this.customers.indexOf(form.name)
@@ -197,7 +197,6 @@ input[type=text],input[type='email'], input[type=password]{
   resize: vertical;
 }
 
-
 label{
   padding: 12px 12px 12px 0;
   display: inline-block;
@@ -211,6 +210,14 @@ label{
   border-radius: 4px;
   cursor: pointer;
   float: right;
+}
+
+.button-table{
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .container{
