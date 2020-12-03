@@ -1,42 +1,71 @@
 <template>
-  <div id="app">
+  <div>
     <form @submit.prevent="add">
-    <div>
+    <div id="container">
       <h1>Customer CRUD</h1>
-      <div class="isiLabel">
-        <input type="hidden" v-model="form.id">
-        <input type="hidden" v-model="form.password2" id="pass2">
-        <label >Name </label> <input type="text" v-model="form.name" required>
+      <div class="row">
+        <div class="col-25">
+          <input type="hidden" v-model="form.id">
+          <input type="hidden" v-model="form.password2" id="pass2">
+          <label for="name">Name </label> 
+        </div>
+        <div class="col-75">
+          <input type="text" v-model="form.name" id="name" placeholder="Fill with customer name" required>
+        </div>
       </div>
-      <div class="isiLabel">
-        <label >Email </label> <input type="email" v-model="form.email" required>
+      <div class="row">
+        <div class="col-25">
+          <label for="email">Email </label> 
+        </div>
+        <div class="col-75">
+          <input type="email" v-model="form.email" id="email" placeholder="Fill with email customer" required>
+        </div>
       </div>
-      <div class="isiLabel">
-        <label >Password </label> <input type="password" v-model="form.password" id="pass1" @keyup="fillPass()">
+      <div class="row">
+        <div class="col-25">
+          <label for="password">Password </label> 
+        </div>
+        <div class="col-75">
+          <input type="password" v-model="form.password" id="pass1">
+        </div>
       </div>
-      <div class="isiLabel">
-        <label >Gender </label> <input type="radio" v-model="form.gender" value="M" > Male / <input type="radio" v-model="form.gender" value="F"> Female
+      <div class="row">
+        <div class="col-25">
+          <label for="gender">Gender </label> 
+        </div>
+        <div class="col-75">
+          <input type="radio" v-model="form.gender" value="M" > Male / <input type="radio" v-model="form.gender" value="F"> Female
+        </div>
       </div>
-      <div class="isiLabel">
-        <label>Marital Status </label> 
+      <div class="row">
+        <div class="col-25">
+          <label for="marital">Marital Status </label> 
+        </div>
+        <div class="col-75">
           <select v-model="form.is_married">
             <option value="Single">Single</option>
             <option value="Married">Married</option>
             <option value="Divorce">Divorce</option>
           </select>
+        </div>
       </div>
-      <div class="isiLabel">
-        <label >Address </label> <input type="text" v-model="form.address" size="50">
+      <div class="row">
+        <div class="col-25">
+          <label for="address">Address </label> 
+        </div>
+        <div class="col-75">
+          <input type="text" v-model="form.address" size="50">
+        </div>
       </div>
-      <div>
-        <button type="submit" v-show="!updateSubmit">Create</button>  
-        <button type="button" v-show="updateSubmit" @click="update(form)">Update</button>
+      <div class="row ">
+        <button type="submit" v-show="!updateSubmit" class="button-submit">Create</button>  
+        <button type="button" v-show="updateSubmit" @click="update(form)" class="button-submit">Update</button>
       </div>
     </div>    
     </form>
     <hr/>
-    <div>
-      <table border="1">
+    <div id="table-responsive">
+      <table border="1" id="customers">
         <tr>
           <th>Nama</th>
           <th>Email</th>
@@ -83,14 +112,14 @@ export default {
   },
   methods: {
     load(){
-        axios.get('http://localhost:8000/show_all_customer').then(res => {
+        axios.get('http://localhost:4000/show_all_customer').then(res => {
         this.customers = res.data.result
       }).catch ((err) => {
         console.log(err);        
       })
     },
       add(){
-      axios.post('http://localhost:8000/create_customer', this.form).then(res => {
+      axios.post('http://localhost:4000/create_customer', this.form).then(res => {
           alert(res.data.status.message)
           this.load()
           this.form.name = ''
@@ -116,7 +145,7 @@ export default {
         this.form.address = customer.address 
     },
     update(form){ 
-       return axios.put('http://localhost:8000/update_customer/' + form.id , {
+       return axios.put('http://localhost:4000/update_customer/' + form.id , {
           name: this.form.name,
           email: this.form.email,
           password: this.form.password,
@@ -142,7 +171,7 @@ export default {
     },
     del(customer){
       if(confirm('Are you sure?'))
-      axios.delete('http://localhost:8000/delete_customer/' + customer.id).then(res =>{
+      axios.delete('http://localhost:4000/delete_customer/' + customer.id).then(res =>{
           alert(res.data.status.message)
           this.load()
           let index = this.customers.indexOf(form.name)
@@ -158,16 +187,88 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 10px;
+input[type=text],input[type='email'], input[type=password]{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
 }
 
-.isiLabel {
-  padding-right: 5px;
-  padding-bottom: 5px;
+
+label{
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+.button-submit{
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+}
+
+.container{
+  margin: auto;
+  width: 50%;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+
+.col-25{
+  float: left;
+  width: 10%;
+  margin-top: 6px;
+}
+
+.col-75{
+  float: left;
+  width: 90%;
+  margin-top: 6px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#table-responsive{
+  overflow-x:auto;
+}
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+@media screen and (max-width: 600px){
+  .col-25, .col-75, button{
+    width: 100%;
+    margin-top: 0;
+  }  
 }
 </style>
